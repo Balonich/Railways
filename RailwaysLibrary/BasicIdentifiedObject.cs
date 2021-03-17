@@ -1,4 +1,4 @@
-namespace Railways
+namespace RailwaysLibrary
 {
     public abstract class BasicIdentifiedObject
     {

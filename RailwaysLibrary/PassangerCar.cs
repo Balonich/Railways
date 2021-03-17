@@ -1,6 +1,6 @@
 using System;
 
-namespace Railways
+namespace RailwaysLibrary
 {
     public partial class Train
     {

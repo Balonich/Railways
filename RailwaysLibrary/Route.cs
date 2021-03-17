@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Railways
+namespace RailwaysLibrary
 {
     public class Route : BasicIdentifiedObject, IDisplayable
     {

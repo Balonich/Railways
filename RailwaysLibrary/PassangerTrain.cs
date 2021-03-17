@@ -1,6 +1,6 @@
 using System;
 
-namespace Railways
+namespace RailwaysLibrary
 {
     public sealed class PassangerTrain : Train
     {
