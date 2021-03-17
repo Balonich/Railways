@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections;
+using RailwaysLibrary;
 
-namespace RailwaysLibrary
+namespace RailwaysUI
 {
     class Program
     {
