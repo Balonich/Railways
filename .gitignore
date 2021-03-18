@@ -363,3 +363,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Global Suppression file for not prioritiezed style problems
+GlobalSuppressions.cs
