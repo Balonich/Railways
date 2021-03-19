@@ -1,21 +1,22 @@
-using System;
-
 namespace RailwaysLibrary
 {
+    using System;
+
     public sealed class PassangerTrain : Train
     {
-        public PassangerTrain(int id) : base(id)
+        public PassangerTrain(int id)
+            : base(id)
         {
-            _carsAllowedAmount = 4;
+            CarsAllowedAmount = 4;
         }
 
         public override void AddCar(int volume, int amountToAdd)
         {
-            if (AmountOfCars < _carsAllowedAmount)
+            if (AmountOfCars < CarsAllowedAmount)
             {
                 if (volume >= amountToAdd)
                 {
-                    _cars.Add(new PassangerCar(volume, amountToAdd));
+                    Cars.Add(new PassangerCar(volume, amountToAdd));
                 }
                 else
                 {

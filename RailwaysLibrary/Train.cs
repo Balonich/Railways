@@ -1,46 +1,60 @@
-using System;
-using System.Collections.Generic;
-
 namespace RailwaysLibrary
 {
+    using System;
+    using System.Collections.Generic;
+
     public abstract partial class Train : BasicIdentifiedObject, ICarriable, IDisplayable
     {
-        protected List<Car> _cars;
-        protected int _carsAllowedAmount;
+        private List<Car> cars;
+
+        protected Train(int id)
+        {
+            ID = id;
+            TrainsCounter++;
+            CarsAllowedAmount = 5;
+            Cars = new List<Car>();
+        }
+
+        public static int TrainsCounter { get; private set; } = 0;
+
         public override int ID { get; }
-        public int AmountOfCars { get => _cars.Count; }
+
+        public int AmountOfCars { get => Cars.Count; }
+
         public int TotalCarsVolume
         {
             get
             {
                 int totalVolumeSum = 0;
-                foreach (Car car in _cars)
+                foreach (Car car in Cars)
                 {
                     totalVolumeSum += car.Volume;
                 }
+
                 return totalVolumeSum;
             }
         }
+
         public int TotalCarsCargo
         {
             get
             {
                 int totalCargoSum = 0;
-                foreach (Car car in _cars)
+                foreach (Car car in Cars)
                 {
                     totalCargoSum += car.AmountOfCargo;
                 }
+
                 return totalCargoSum;
             }
         }
-        public static int TrainsCounter { get; private set; } = 0;
 
-        public Train(int id)
+        protected int CarsAllowedAmount { get; set; }
+
+        protected List<Car> Cars
         {
-            ID = id;
-            TrainsCounter++;
-            _carsAllowedAmount = 5;
-            _cars = new List<Car>();
+            get => cars;
+            set => cars = value;
         }
 
         public abstract void AddCar(int volume, int amountToAdd);
@@ -53,7 +67,7 @@ namespace RailwaysLibrary
             }
             else
             {
-                _cars.Clear();
+                Cars.Clear();
             }
         }
 
@@ -69,7 +83,7 @@ namespace RailwaysLibrary
                 Console.Write("Был убран ");
                 carToRemove.DisplayInfo();
                 AddCargo(carToRemove.AmountOfCargo);
-                _cars.Remove(carToRemove);
+                Cars.Remove(carToRemove);
             }
         }
 
@@ -88,7 +102,7 @@ namespace RailwaysLibrary
                         Car carToAddCargo = FindCarWithLargestCargo();
                         if (amountToAdd > carToAddCargo.Volume - carToAddCargo.AmountOfCargo)
                         {
-                            amountToAdd -= (carToAddCargo.Volume - carToAddCargo.AmountOfCargo);
+                            amountToAdd -= carToAddCargo.Volume - carToAddCargo.AmountOfCargo;
                             carToAddCargo.AddCargo(carToAddCargo.Volume - carToAddCargo.AmountOfCargo);
                         }
                         else
@@ -97,15 +111,19 @@ namespace RailwaysLibrary
                             amountToAdd = 0;
                         }
                     }
-                    catch (ArgumentNullException e)
+                    catch (ArgumentNullException)
                     {
                         Console.WriteLine("Похоже, что все вагоны уже заполнены. Остаток: " + amountToAdd);
                         break;
                     }
-                    catch (NullReferenceException e)
+                    catch (NullReferenceException)
                     {
                         Console.WriteLine("Похоже, что все вагоны уже заполнены. Остаток: " + amountToAdd);
                         break;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Неизвестная ошибка...");
                     }
                 }
             }
@@ -135,10 +153,14 @@ namespace RailwaysLibrary
                             amountToRemove = 0;
                         }
                     }
-                    catch (ArgumentNullException e)
+                    catch (ArgumentNullException)
                     {
                         Console.WriteLine("Похоже, что все вагоны уже пустые.");
                         break;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Неизвестная ошибка...");
                     }
                 }
             }
@@ -169,7 +191,7 @@ namespace RailwaysLibrary
                     Console.WriteLine("человек");
                 }
 
-                foreach (Car car in _cars)
+                foreach (Car car in Cars)
                 {
                     car.DisplayInfo();
                 }
@@ -178,21 +200,21 @@ namespace RailwaysLibrary
 
         private Car FindCarWithLargestCargo()
         {
-            Car carWithLargestCargo = _cars[0];
+            Car carWithLargestCargo = Cars[0];
 
             for (int i = 1; i < AmountOfCars; i++)
             {
-                if (!_cars[i].IsFull)
+                if (!Cars[i].IsFull)
                 {
                     if (carWithLargestCargo.IsFull)
                     {
-                        carWithLargestCargo = _cars[i];
+                        carWithLargestCargo = Cars[i];
                     }
                     else
                     {
-                        if ((carWithLargestCargo.Volume - carWithLargestCargo.AmountOfCargo) > (_cars[i].Volume - _cars[i].AmountOfCargo))
+                        if ((carWithLargestCargo.Volume - carWithLargestCargo.AmountOfCargo) > (Cars[i].Volume - Cars[i].AmountOfCargo))
                         {
-                            carWithLargestCargo = _cars[i];
+                            carWithLargestCargo = Cars[i];
                         }
                     }
                 }
@@ -210,7 +232,7 @@ namespace RailwaysLibrary
 
         private Car FindCarWithLowestCargo(bool allowZeros = false)
         {
-            Car carWithLowestCargo = _cars[0];
+            Car carWithLowestCargo = Cars[0];
 
             for (int i = 1; i < AmountOfCars; i++)
             {
@@ -219,21 +241,22 @@ namespace RailwaysLibrary
                     return carWithLowestCargo;
                 }
 
-                if (!_cars[i].IsEmpty)
+                if (!Cars[i].IsEmpty)
                 {
                     if (carWithLowestCargo.IsEmpty)
                     {
-                        carWithLowestCargo = _cars[i];
+                        carWithLowestCargo = Cars[i];
                     }
                     else
                     {
-                        if (carWithLowestCargo.AmountOfCargo > _cars[i].AmountOfCargo)
+                        if (carWithLowestCargo.AmountOfCargo > Cars[i].AmountOfCargo)
                         {
-                            carWithLowestCargo = _cars[i];
+                            carWithLowestCargo = Cars[i];
                         }
                     }
                 }
             }
+
             return carWithLowestCargo;
         }
     }
