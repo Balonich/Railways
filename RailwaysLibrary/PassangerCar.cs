@@ -1,14 +1,14 @@
-using System;
-
 namespace RailwaysLibrary
 {
+    using System;
+
     public partial class Train
     {
         protected class PassangerCar : Car
         {
-            public PassangerCar(int volume, int amountOfPassangers) : base(volume, amountOfPassangers)
+            public PassangerCar(int volume, int amountOfPassangers)
+                : base(volume, amountOfPassangers)
             {
-
             }
 
             public override void DisplayInfo()

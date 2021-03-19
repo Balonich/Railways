@@ -1,51 +1,35 @@
-using System;
-
 namespace RailwaysLibrary
 {
+    using System;
+
     public partial class Train
     {
         protected abstract class Car : ICarriable
         {
-            protected readonly int ID;
-            public int Volume { get; private set; }
-            public int AmountOfCargo { get; protected set; }
-            public bool IsEmpty
-            {
-                get
-                {
-                    if (AmountOfCargo == 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-            public bool IsFull
-            {
-                get
-                {
-                    if (AmountOfCargo == Volume)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
+            private readonly Random randomID = new ();
 
-            Random randomID = new Random();
-
-            public Car(int volume, int amount)
+            protected Car(int volume, int amount)
             {
                 Volume = volume;
                 AmountOfCargo = amount;
                 ID = randomID.Next();
             }
+
+            public int Volume { get; }
+
+            public int AmountOfCargo { get; protected set; }
+
+            public bool IsEmpty
+            {
+                get => AmountOfCargo == 0;
+            }
+
+            public bool IsFull
+            {
+                get => AmountOfCargo == Volume;
+            }
+
+            protected int ID { get; }
 
             public void AddCargo(int amountToAdd)
             {
