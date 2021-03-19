@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
-
 namespace RailwaysLibrary
 {
+    using System;
+
     public static partial class Util
     {
         public static class TrainMenus
@@ -31,17 +30,18 @@ namespace RailwaysLibrary
                                 TrainsCreationMenu();
                                 break;
                             case 2:
-                                Train foundTrain = GetObject<Train>(Util.Trains);
+                                Train foundTrain = GetObject(Trains);
                                 if (foundTrain != null)
                                 {
                                     CarsMenu(foundTrain);
                                 }
+
                                 break;
                             case 3:
-                                Util.DisplayAll<Train>(Util.Trains);
+                                DisplayAll(Trains);
                                 break;
                             case 4:
-                                Util.DisplayDetailed<Train>(Util.Trains, ReadID(true));
+                                DisplayDetailed(Trains, ReadID(true));
                                 break;
                             default:
                                 Console.WriteLine("Вы выбрали неверный пункт меню");
@@ -56,7 +56,7 @@ namespace RailwaysLibrary
                 }
             }
 
-            static void TrainsCreationMenu()
+            private static void TrainsCreationMenu()
             {
                 bool flag = true;
                 while (flag)
@@ -77,16 +77,18 @@ namespace RailwaysLibrary
                             case 1:
                                 if (CheckTrain(out int passangerID))
                                 {
-                                    Util.AddTrain(new PassangerTrain(passangerID));
+                                    AddTrain(new PassangerTrain(passangerID));
                                     Console.WriteLine("Поезд успешно создан!");
                                 }
+
                                 break;
                             case 2:
                                 if (CheckTrain(out int cargoID))
                                 {
-                                    Util.AddTrain(new CargoTrain(cargoID));
+                                    AddTrain(new CargoTrain(cargoID));
                                     Console.WriteLine("Поезд успешно создан!");
                                 }
+
                                 break;
                             default:
                                 Console.WriteLine("Вы выбрали неверный пункт меню");
@@ -101,7 +103,7 @@ namespace RailwaysLibrary
                 }
             }
 
-            static void CarsMenu(Train foundTrain)
+            private static void CarsMenu(Train foundTrain)
             {
                 bool flag = true;
                 while (flag)
@@ -181,7 +183,7 @@ namespace RailwaysLibrary
                                 foundTrain.RemoveCargo(amountToRemove);
                                 break;
                             case 6:
-                                Util.DisplayDetailed<Train>(Util.Trains, foundTrain.ID);
+                                DisplayDetailed(Trains, foundTrain.ID);
                                 break;
                             default:
                                 Console.WriteLine("Вы выбрали неверный пункт меню");
@@ -196,15 +198,15 @@ namespace RailwaysLibrary
                 }
             }
 
-            static bool CheckTrain(out int id)
+            private static bool CheckTrain(out int id)
             {
                 id = ReadID(true);
-                if (Util.IsEmpty<Train>(Util.Trains))
+                if (IsEmpty(Trains))
                 {
                     return true;
                 }
 
-                if (Util.Find<Train>(Util.Trains, id) == null)
+                if (Find(Trains, id) == null)
                 {
                     return true;
                 }
@@ -215,9 +217,10 @@ namespace RailwaysLibrary
                 }
             }
 
-            static Train CheckTrain()
+            // not used, but have to leave it here
+            private static Train CheckTrain()
             {
-                Train foundTrain = Util.Find<Train>(Util.Trains, ReadID(true));
+                Train foundTrain = Find(Trains, ReadID(true));
 
                 if (foundTrain == null)
                 {

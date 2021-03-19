@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
-
 namespace RailwaysLibrary
 {
+    using System;
+    using System.Collections.Generic;
+
     public static partial class Util
     {
         public static class RouteMenus
@@ -37,23 +37,24 @@ namespace RailwaysLibrary
                                 StationsCreationMenu();
                                 break;
                             case 3:
-                                Route foundRoute = GetObject<Route>(Util.Routes);
+                                Route foundRoute = GetObject(Routes);
                                 if (foundRoute != null)
                                 {
                                     RouteEditingMenu(foundRoute);
                                 }
+
                                 break;
                             case 4:
-                                Util.DisplayAll<Route>(Util.Routes);
+                                DisplayAll(Routes);
                                 break;
                             case 5:
-                                Util.DisplayAll<Station>(Util.Stations);
+                                DisplayAll(Stations);
                                 break;
                             case 6:
-                                Util.DisplayDetailed<Route>(Util.Routes, ReadID());
+                                DisplayDetailed(Routes, ReadID());
                                 break;
                             case 7:
-                                Util.DisplayDetailed<Station>(Util.Stations, ReadID());
+                                DisplayDetailed(Stations, ReadID());
                                 break;
                             default:
                                 Console.WriteLine("Вы выбрали неверный пункт меню");
@@ -67,22 +68,22 @@ namespace RailwaysLibrary
             private static void RoutesCreationMenu()
             {
                 Console.Clear();
-                if (Util.Stations.Count < 2)
+                if (Stations.Count < 2)
                 {
                     Console.WriteLine("В системе недостаточно станций для создания пути\nДля создания пути нужно минимум 2 станции");
                 }
                 else
                 {
                     Console.WriteLine("Выберите первую станцию: ");
-                    Util.DisplayAll<Station>(Util.Stations);
-                    Station firstStation = Util.Find<Station>(Util.Stations, Util.ReadID());
+                    DisplayAll(Stations);
+                    Station firstStation = Find(Stations, ReadID());
 
                     Console.WriteLine("Выберите вторую станцию: ");
-                    Util.DisplayAll<Station>(Util.Stations);
-                    Station secondStation = Util.Find<Station>(Util.Stations, Util.ReadID());
+                    DisplayAll(Stations);
+                    Station secondStation = Find(Stations, ReadID());
 
-                    Route newRoute = new Route(firstStation, secondStation);
-                    Util.AddRoute(newRoute);
+                    Route newRoute = new (firstStation, secondStation);
+                    AddRoute(newRoute);
                     Console.Clear();
                     Console.WriteLine("Создан новый путь: ");
                     newRoute.DisplayInfo();
@@ -103,13 +104,13 @@ namespace RailwaysLibrary
                     switch (trainStationType)
                     {
                         case 1:
-                            Util.AddStation(new Station(stationName));
+                            AddStation(new Station(stationName));
                             break;
                         case 2:
-                            Util.AddStation(new CargoStation(stationName));
+                            AddStation(new CargoStation(stationName));
                             break;
                         case 3:
-                            Util.AddStation(new PassangerStation(stationName));
+                            AddStation(new PassangerStation(stationName));
                             break;
                         default:
                             Console.WriteLine("Вы выбрали неверный пункт меню");
@@ -147,21 +148,22 @@ namespace RailwaysLibrary
                             case 2:
                                 Console.WriteLine("Выберите станцию, которую хотите убрать:");
                                 foundRoute.DisplayDetailedInfo();
-                                foundRoute.RemoveStation(Util.Find<Station>(Util.Stations, ReadID()));
+                                foundRoute.RemoveStation(Find(Stations, ReadID()));
                                 break;
                             case 3:
-                                Util.DisplayAll<Station>(Util.Stations);
+                                DisplayAll(Stations);
                                 break;
                             case 4:
                                 foundRoute.DisplayDetailedInfo();
                                 break;
                             case 5:
                                 Console.WriteLine("Выберите поезд, который хотите добавить:");
-                                Util.DisplayAll<Train>(Util.Trains);
-                                if (!Util.IsEmpty<Train>(Util.Trains))
+                                DisplayAll(Trains);
+                                if (!IsEmpty(Trains))
                                 {
-                                    foundRoute.AddTrain(Util.Find<Train>(Util.Trains, ReadID(true)));
+                                    foundRoute.AddTrain(Find(Trains, ReadID(true)));
                                 }
+
                                 break;
                             case 6:
                                 foundRoute.MoveTrains();
@@ -185,20 +187,20 @@ namespace RailwaysLibrary
                 {
                     Console.Clear();
                     Console.WriteLine("Выберите станцию, которую хотите добавить:");
-                    Util.DisplayAll<Station>(Util.Stations);
+                    DisplayAll(Stations);
                     switch (trainStationType)
                     {
                         case 1:
-                            foundRoute.AddStation(Util.Find<Station>(Util.Stations, ReadID()), true);
+                            foundRoute.AddStation(Find(Stations, ReadID()), true);
                             break;
                         case 2:
-                            foundRoute.AddStation(Util.Find<Station>(Util.Stations, ReadID()), false);
+                            foundRoute.AddStation(Find(Stations, ReadID()), false);
                             break;
                         case 3:
-                            Station stationToAdd = Util.Find<Station>(Util.Stations, ReadID());
+                            Station stationToAdd = Find(Stations, ReadID());
                             Console.WriteLine("Выберите станцию, после которой хотите добавить новую:");
                             foundRoute.DisplayDetailedInfo();
-                            foundRoute.AddStation(stationToAdd, Util.Find<Station>(Util.Stations, ReadID()));
+                            foundRoute.AddStation(stationToAdd, Find(Stations, ReadID()));
                             break;
                         default:
                             Console.WriteLine("Вы выбрали неверный пункт меню");

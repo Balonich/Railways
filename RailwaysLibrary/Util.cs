@@ -1,13 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace RailwaysLibrary
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public static partial class Util
     {
         public static List<Station> Stations { get; private set; } = new List<Station>();
+
         public static List<Route> Routes { get; private set; } = new List<Route>();
+
         public static List<Train> Trains { get; private set; } = new List<Train>();
 
         public static void AddStation(Station newStation)
@@ -26,48 +28,43 @@ namespace RailwaysLibrary
 
         public static void AddTrain(Train newTrain) => Trains.Add(newTrain);
 
-        public static void DisplayAll<T>(List<T> list) where T : IDisplayable
+        public static void DisplayAll<T>(List<T> list)
+            where T : IDisplayable
         {
-            if (IsEmpty<T>(list))
+            if (IsEmpty(list))
             {
                 Console.WriteLine("Список пуст");
                 return;
             }
+
             foreach (T element in list)
             {
                 element.DisplayInfo();
             }
         }
 
-        public static void DisplayDetailed<T>(List<T> list, int id) where T : BasicIdentifiedObject, IDisplayable
+        public static void DisplayDetailed<T>(List<T> list, int id)
+            where T : BasicIdentifiedObject, IDisplayable
         {
-            list.Where(list => list.ID == id).First().DisplayDetailedInfo();
+            list.First(list => list.ID == id).DisplayDetailedInfo();
         }
 
         // public static T Find<T>(List<T> list, int id) where T : BasicIdentifiedObject, IDisplayable => list.Where(element => element.ID == id).First();
-        public static T Find<T>(List<T> list, int id) where T : BasicIdentifiedObject, IDisplayable
+        public static T Find<T>(List<T> list, int id)
+            where T : BasicIdentifiedObject, IDisplayable
         {
-            foreach(T item in list)
+            foreach (T item in list)
             {
                 if (item.ID == id)
                 {
                     return item;
                 }
             }
+
             return null;
         }
 
-        private static bool IsEmpty<T>(List<T> list)
-        {
-            if (list.Count == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        private static bool IsEmpty<T>(List<T> list) => list.Count == 0;
 
         private static bool UniqueStation(Station stationToCheck, out Station foundStation)
         {
@@ -88,6 +85,7 @@ namespace RailwaysLibrary
                     }
                 }
             }
+
             return true;
         }
 
@@ -128,15 +126,17 @@ namespace RailwaysLibrary
             return id;
         }
 
-        static T GetObject<T>(List<T> list) where T : BasicIdentifiedObject, IDisplayable
+        private static T GetObject<T>(List<T> list)
+            where T : BasicIdentifiedObject, IDisplayable
         {
-            if (Util.IsEmpty<T>(list))
+            if (IsEmpty(list))
             {
                 return null;
             }
+
             int id = typeof(T) == typeof(Train) ? ReadID(true) : ReadID();
-            T foundObject = Util.Find<T>(list, id);
-                
+            T foundObject = Find(list, id);
+
             if (foundObject == null)
             {
                 Console.WriteLine("Объект с таким ID не существует");
