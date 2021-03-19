@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections;
-using RailwaysLibrary;
-
-namespace RailwaysUI
+﻿namespace RailwaysUI
 {
-    class Program
-    {
-        static CargoTrain cargoTrain;
-        static PassangerTrain passangerTrain;
+    using System;
+    using RailwaysLibrary;
 
-        static void Main(string[] args)
+    public static class Program
+    {
+        public static void Main()
         {
             Menu();
         }
 
-        static void Menu()
+        private static void Menu()
         {
             while (true)
             {
