@@ -1,12 +1,12 @@
-using System;
-
 namespace RailwaysLibrary
 {
+    using System;
+
     public class PassangerStation : Station
     {
-        public PassangerStation(string name) : base(name)
+        public PassangerStation(string name)
+        : base(name)
         {
-
         }
 
         public override void TakeTrain(Train arrivingTraing)
@@ -14,7 +14,7 @@ namespace RailwaysLibrary
             if (arrivingTraing is PassangerTrain)
             {
                 Console.WriteLine($"Поезд №{arrivingTraing.ID} прибыл на пассажирскую станцию {Name}");
-                _trainsOnTheStation.Enqueue(arrivingTraing);
+                TrainsOnTheStation.Enqueue(arrivingTraing);
             }
             else
             {

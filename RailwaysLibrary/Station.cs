@@ -1,47 +1,40 @@
-using System;
-using System.Collections.Generic;
-
 namespace RailwaysLibrary
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Station : BasicIdentifiedObject, IDisplayable
     {
+        private static int stationsCounter = 1; // how does it work with inheritance?
+
+        public Station(string stationName)
+        {
+            ID = stationsCounter;
+            stationsCounter++;
+            Name = stationName;
+            TrainsOnTheStation = new Queue<Train>();
+        }
+
         public override int ID { get; }
-        public readonly string Name;
+
         public bool IsEmpty
         {
-            get
-            {
-                if (_trainsOnTheStation.Count == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+            get => TrainsOnTheStation.Count == 0;
         }
 
-        protected Queue<Train> _trainsOnTheStation;
-        private static int _stationsCounter = 1; // how does it work with inheritance?
+        protected string Name { get; }
 
-        public Station(string name)
-        {
-            ID = _stationsCounter;
-            _stationsCounter++;
-            Name = name;
-            _trainsOnTheStation = new Queue<Train>();
-        }
+        protected Queue<Train> TrainsOnTheStation { get; set; }
 
         public virtual void TakeTrain(Train arrivingTraing)
         {
             Console.WriteLine($"Поезд №{arrivingTraing.ID} прибыл на станцию {Name}");
-            _trainsOnTheStation.Enqueue(arrivingTraing);
+            TrainsOnTheStation.Enqueue(arrivingTraing);
         }
 
         public Train SendTrain()
         {
-            return _trainsOnTheStation.Dequeue();
+            return TrainsOnTheStation.Dequeue();
         }
 
         public virtual void DisplayInfo()
@@ -58,8 +51,8 @@ namespace RailwaysLibrary
             }
             else
             {
-                Console.WriteLine($"На станции находится {_trainsOnTheStation.Count} поездов\nИнформация о поездах на станции:");
-                foreach (Train train in _trainsOnTheStation)
+                Console.WriteLine($"На станции находится {TrainsOnTheStation.Count} поездов\nИнформация о поездах на станции:");
+                foreach (Train train in TrainsOnTheStation)
                 {
                     train.DisplayInfo();
                 }
