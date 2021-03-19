@@ -1,11 +1,38 @@
-using System;
-using System.Collections.Generic;
-
 namespace RailwaysLibrary
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Route : BasicIdentifiedObject, IDisplayable
     {
+        private static int routesCounter = 1;
+
+        public Route(Station firstStation, Station lastStation)
+            : this()
+        {
+            StationsOnRoute.AddFirst(firstStation);
+            StationsOnRoute.AddLast(lastStation);
+        }
+
+        public Route(Station[] stations)
+            : this()
+        {
+            foreach (Station newStation in stations)
+            {
+                StationsOnRoute.AddLast(newStation);
+            }
+        }
+
+        // is this legal? private constructor...
+        private Route()
+        {
+            StationsOnRoute = new LinkedList<Station>();
+            ID = routesCounter;
+            routesCounter++;
+        }
+
         public override int ID { get; }
+
         public string Name
         {
             get
@@ -16,67 +43,35 @@ namespace RailwaysLibrary
                 }
                 else
                 {
-                    return $"{_stationsOnRoute.First.Value.Name} - {_stationsOnRoute.Last.Value.Name}";
+                    return $"{StationsOnRoute.First.Value.Name} - {StationsOnRoute.Last.Value.Name}";
                 }
             }
         }
 
         public bool IsEmpty
         {
-            get
-            {
-                if (_stationsOnRoute.Count == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-        private LinkedList<Station> _stationsOnRoute;
-        private static int _routesCounter = 1;
-
-        // is this legal?
-        private Route()
-        {
-            _stationsOnRoute = new LinkedList<Station>();
-            ID = _routesCounter;
-            _routesCounter++;
+            get => StationsOnRoute.Count == 0;
         }
 
-        public Route(Station firstStation, Station lastStation) : this()
-        {
-            _stationsOnRoute.AddFirst(firstStation);
-            _stationsOnRoute.AddLast(lastStation);
-        }
-
-        public Route(Station[] stations) : this()
-        {
-            foreach (Station newStation in stations)
-            {
-                _stationsOnRoute.AddLast(newStation);
-            }
-        }
+        private LinkedList<Station> StationsOnRoute { get; set; }
 
         public void AddStation(Station stationToAdd, bool addAfterLast)
         {
             if (addAfterLast)
             {
-                _stationsOnRoute.AddLast(stationToAdd);
+                StationsOnRoute.AddLast(stationToAdd);
             }
             else
             {
-                _stationsOnRoute.AddFirst(stationToAdd);
+                StationsOnRoute.AddFirst(stationToAdd);
             }
         }
 
         public void AddStation(Station stationToAdd, Station stationFromRoute)
         {
-            if (_stationsOnRoute.Contains(stationFromRoute))
+            if (StationsOnRoute.Contains(stationFromRoute))
             {
-                _stationsOnRoute.AddAfter(_stationsOnRoute.Find(stationFromRoute), stationToAdd);
+                StationsOnRoute.AddAfter(StationsOnRoute.Find(stationFromRoute), stationToAdd);
             }
             else
             {
@@ -86,11 +81,11 @@ namespace RailwaysLibrary
 
         public void RemoveStation(Station stationToRemove)
         {
-            if (_stationsOnRoute.Count > 2)
+            if (StationsOnRoute.Count > 2)
             {
-                if (_stationsOnRoute.Contains(stationToRemove))
+                if (StationsOnRoute.Contains(stationToRemove))
                 {
-                    _stationsOnRoute.Remove(stationToRemove);
+                    StationsOnRoute.Remove(stationToRemove);
                 }
                 else
                 {
@@ -105,15 +100,15 @@ namespace RailwaysLibrary
 
         public void AddTrain(Train train)
         {
-            _stationsOnRoute.First.Value.TakeTrain(train);
+            StationsOnRoute.First.Value.TakeTrain(train);
         }
 
         public void MoveTrains()
         {
-            foreach (Station station in _stationsOnRoute)
+            foreach (Station station in StationsOnRoute)
             {
                 Train train = station.SendTrain();
-                _stationsOnRoute.Find(station).Next.Value.TakeTrain(train);
+                StationsOnRoute.Find(station).Next.Value.TakeTrain(train);
             }
         }
 
@@ -124,15 +119,16 @@ namespace RailwaysLibrary
 
         public void DisplayDetailedInfo()
         {
-            List<string> stations = new List<string>();
+            List<string> stations = new ();
 
             DisplayInfo();
             Console.Write("Станции:\n\t");
-            foreach (Station station in _stationsOnRoute)
+            foreach (Station station in StationsOnRoute)
             {
                 stations.Add($"№{station.ID}-{station.Name}");
             }
-            Console.WriteLine(String.Join(" <-> ", stations));
+
+            Console.WriteLine(string.Join(" <-> ", stations));
         }
     }
 }
