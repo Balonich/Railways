@@ -22,7 +22,7 @@ namespace RailwaysLibrary
             get => TrainsOnTheStation.Count == 0;
         }
 
-        protected string Name { get; }
+        public string Name { get; }
 
         protected Queue<Train> TrainsOnTheStation { get; set; }
 
